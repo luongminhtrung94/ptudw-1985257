@@ -27,10 +27,10 @@
     <div class="owl-carousel owl-theme hero-carousel">
         {{#each categories}}
         <div class="hero-carousel__slide">
-            <img src="{{imagepath}}" alt="" class="img-fluid">
+            <img src="{{dataValues.imagepath}}" alt="" class="img-fluid">
             <a href="#" class="hero-carousel__slideOverlay">
-                <h3>{{name}}</h3>
-                <p>{{summary}}</p>
+                <h3>{{dataValues.name}}</h3>
+                <p>{{dataValues.summary}}</p>
             </a>
         </div>
         {{/each}}
