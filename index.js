@@ -12,9 +12,15 @@ const hbs = expressHbs.create({
 app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
 
+app.use("/", require("./routes/indexRouter"));
+app.use("/products", require("./routes/productRouter"));
 
-app.get('/',(req,res)=>{
-    res.render('index');
+app.get('/sync', (req,res)=>{
+    let models = require("./models");
+    models.sequelize.sync()
+    .then(()=>{
+        res.send("database sync completed!");
+    });
 });
 
 app.get('/:page',(req,res)=>{
