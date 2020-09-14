@@ -23,8 +23,13 @@ router.get("/", (req,res)=>{
     });
 });
 
-router.get("/:id", (req,res)=>{
-    res.render("single-product");
+router.get("/:id", (req,res,next)=>{
+    let productController = require("../controllers/productController");
+    productController.getById(req.params.id)
+    .then(data =>{
+        res.locals.product = data;
+        res.render("single-product");
+    })
 });
 
 module.exports = router;
