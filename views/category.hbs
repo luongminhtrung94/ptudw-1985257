@@ -276,7 +276,10 @@
 
 <script>
   var search = location.search.substring(1);
-  let urlParams = JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
+  let urlParams = {};
+  if(search){
+   urlParams = JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
+  }
   let params = {
     category: 0 ,
     brand: 0,
