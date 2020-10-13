@@ -77,25 +77,27 @@
           <!-- Start Filter Bar -->
           <div class="filter-bar d-flex flex-wrap align-items-center">
             <div class="sorting">
-              <select>
-                <option value="1">Default sorting</option>
-                <option value="1">Default sorting</option>
-                <option value="1">Default sorting</option>
+              <select id="sort" onchange="selectParams('sort',this.value)">
+                <option value="name">Sorting by name</option>
+                <option value="price">Sorting by price low to high</option>
+                <option value="overallReview">Sorting by reviews from high to low</option>
               </select>
             </div>
             <div class="sorting mr-auto">
-              <select>
-                <option value="1">Show 12</option>
-                <option value="1">Show 12</option>
-                <option value="1">Show 12</option>
+              <select id="limit" onchange="selectParams('limit',this.value)">
+                <option value="9">Show 9</option>
+                <option value="18">Show 18</option>
+                <option value="36">Show 36</option>
               </select>
             </div>
             <div>
               <div class="input-group filter-bar-search">
-                <input type="text" placeholder="Search">
-                <div class="input-group-append">
-                  <button type="button"><i class="ti-search"></i></button>
-                </div>
+                <form action='/products' method="GET" >
+                  <input name="search" type="text" placeholder="Search">
+                  <div class="input-group-append">
+                    <button type="submit"><i class="ti-search"></i></button>
+                  </div>
+                </form>
               </div>
             </div>
           </div>
@@ -122,6 +124,11 @@
                 </div>
               </div>
               {{/each}}
+            </div>
+            <div class="row justify-content-center">
+              <nav class="Page navigation example" id="pagination">
+                {{{ createPagination pagination paginationClass="pagination"}}}
+              </nav>
             </div>
           </section>
           <!-- End Best Seller -->
@@ -275,6 +282,15 @@
 
 
 <script>
+
+ function serialize(obj) {
+  var str = [];
+  for (var p in obj)
+    if (obj.hasOwnProperty(p)) {
+      str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+    }
+  return str.join("&");
+}
   var search = location.search.substring(1);
   let urlParams = {};
   if(search){
@@ -285,7 +301,9 @@
     brand: 0,
     color: 0,
     min: 0,
-    max: 100
+    max: 100,
+    sort: '',
+    limit: 9
   };
 
   for(let key in params){
@@ -294,23 +312,29 @@
     }
   }
 
-
-  for(let key in params){
-    let control = $(`#${key}${urlParams[key]}`);
-    if(control){
-      $(control).prop('checked',true);
+  $(document).ready(()=>{
+    let checkboxes = ['category','brand','color'];
+    for(let key in checkboxes){
+      let control = $(`#${key}${urlParams[key]}`);
+      if(control){
+        $(control).prop('checked',true);
+      }
     }
-  }
 
-
- function serialize(obj) {
-  var str = [];
-  for (var p in obj)
-    if (obj.hasOwnProperty(p)) {
-      str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
-    }
-  return str.join("&");
-}
+    $("#sort").val(urlParams['sort']);
+    $("#limit").val(urlParams['limit']);
+    $("#pagination li").addClass("page-item");
+    $("#pagination li a").addClass("page-link");
+    let savePage = urlParams['page'];
+    $("#pagination li a").each((index,item)=>{
+      // href = /product?page=2
+      let page = $(item).attr("href").split('=')[1];
+      urlParams['page'] = page;
+      let href = '/products?' + serialize(urlParams);
+      $(item).attr("href", href);
+    });
+    urlParams['page'] = savePage;
+  });
   function selectParams(key, value, reset = false){
     if(reset){
       for(let key in params){
