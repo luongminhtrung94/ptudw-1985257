@@ -12,15 +12,15 @@ controller.getAll = (query) =>{
             include: [{
                 model: models.Product,
                 attributes: ['id'],
-                where: {
-                    price: {
-                        [Op.gte]: query.min,
-                        [Op.lte]: query.max,
-                    }
-                }
+                where: {}
             }],
         }
-
+        if(query.min || query.max){
+            options.where.price = {
+                [Op.gte]: query.min,
+                [Op.lte]: query.max,
+            }
+        }
         if(query.category > 0){
             options.include[0].where.categoryId = query.category;
         }

@@ -13,7 +13,6 @@ controller.getTrendingProducts = () =>{
             limit:8,
             include: [{model: models.Category}],
             attributes: ['id','name','imagepath','price'],
-            raw: true
         })
         .then( data => resolve(data))
         .catch( error => reject(new Error(error)));
@@ -24,7 +23,7 @@ controller.getAll = (query) =>{
     return new Promise((resolve, reject) =>{
         let options  = {
             include: [{model: models.Category}],
-            attributes: ['id','name','imagepath','price'],
+            attributes: ['id','name','imagepath','price', 'categoryId'],
             where: {}
         }
         if(query.min || query.max){
