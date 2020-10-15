@@ -39,13 +39,13 @@ app.use((req, res, next) =>{
     var cart = new Cart(req.session.cart ? req.session.cart : {});
     req.session.cart = cart;
     res.locals.totalQuantity = cart.totalQuantity || 0;
-    console.log(cart);
     next();
 });
 
 app.use("/", require("./routes/indexRouter"));
 app.use("/products", require("./routes/productRouter"));
 app.use("/cart", require("./routes/cartRouter"));
+app.use("/comments", require("./routes/commentRouter"));
 
 app.get('/sync', (req,res)=>{
     let models = require("./models");
