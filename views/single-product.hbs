@@ -207,29 +207,22 @@
 						<div class="review_box">
 							<h4>Add a Review</h4>
 							<p>Your Rating:</p>
-							<ul class="list">
-								<li><a href="#"><i class="fa fa-star"></i></a></li>
-								<li><a href="#"><i class="fa fa-star"></i></a></li>
-								<li><a href="#"><i class="fa fa-star"></i></a></li>
-								<li><a href="#"><i class="fa fa-star"></i></a></li>
-								<li><a href="#"><i class="fa fa-star"></i></a></li>
+							<ul class="list" id="starList">
+								<li><a><i class="fa fa-star"></i></a></li>
+								<li><a><i class="fa fa-star"></i></a></li>
+								<li><a><i class="fa fa-star"></i></a></li>
+								<li><a><i class="fa fa-star"></i></a></li>
+								<li><a><i class="fa fa-star disabled"></i></a></li>
 							</ul>
-							<p>Outstanding</p>
-							<form action="#/" class="form-contact form-review mt-3">
+							<p id="starName">Outstanding</p>
+							<form action="/reviews" method="POST" class="form-contact form-review mt-3">
 								<div class="form-group">
-									<input class="form-control" name="name" type="text" placeholder="Enter your name"
-										required>
+									<input type="hidden" name="productId" value="{{dataValues.id}}" />
+									<input type="hidden" name="rating" id="rating" value="{{../userReview.dataValues.rating}}"/>
 								</div>
 								<div class="form-group">
-									<input class="form-control" name="email" type="email"
-										placeholder="Enter email address" required>
-								</div>
-								<div class="form-group">
-									<input class="form-control" name="subject" type="text" placeholder="Enter Subject">
-								</div>
-								<div class="form-group">
-									<textarea class="form-control different-control w-100" name="textarea" id="textarea"
-										cols="30" rows="5" placeholder="Enter Message"></textarea>
+									<textarea name="message" class="form-control different-control w-100"
+										cols="30" rows="5" placeholder="Enter Message">{{../userReview.dataValues.message}}</textarea>
 								</div>
 								<div class="form-group text-center text-md-right mt-3">
 									<button type="submit" class="button button--active button-review">Submit
@@ -376,7 +369,54 @@
 		$("#parentCommentId").val("");
 	}
 
+	function checkStars(){
+		let rating = getRating(this);
+		$('#rating').val(rating);
+		showStars(rating);
+
+		
+	}
+
+	function highlightStars(){
+		let rating = getRating(this);
+		showStars(rating);
+	}
+
+	function resetStars(){
+		let rating = $("#rating").val();
+		showStars(rating);
+	}
+
+	function getRating(star){
+		let stars = $("#starList i");
+		for(let i= 0; i < 5; i++){
+			if($(stars[i]).get(0) == star){
+				return (i + 1);
+			}
+		}
+		return 0;
+	}
+
+	function showStars(rating){
+		let stars = $("#starList i");
+		for(let i=0; i< 5; i++){
+			$(stars[i]).removeClass("disabled");
+		}
+
+		for(let i=rating; i< 5; i++){
+			$(stars[i]).addClass("disabled");
+		}
+
+		let starNames = ['Please rating this product!', 'Worst', 'Bad', 'Ok', 'Good', 'Outstanding'];
+
+		$("#starName").html(starNames[rating]);
+	}
+
 	$(document).ready(()=>{
 		$("#closeButton").hide();
+		$("#starList i").on("click", checkStars);
+		$("#starList i").on("mouseover", highlightStars);
+		$("#starList i").on("mouseout", resetStars);
+		resetStars();
 	});
 </script>

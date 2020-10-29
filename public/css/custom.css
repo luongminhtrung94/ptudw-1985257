@@ -1,3 +1,6 @@
+.review_box #starList a{
+    color:yellow;
+}
 .fa.fa-star.disabled{
     color:lightgray !important;
 }
