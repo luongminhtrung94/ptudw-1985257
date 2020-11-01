@@ -143,6 +143,7 @@
 					</div>
 					<div class="col-lg-6">
 						<div class="review_box">
+							{{#if ../isLoggedIn}}
 							<h4>Post a comment</h4>
 							<form class="row form-contact form-review mt-3" action="/comments" method="post" id="contactForm"
 								novalidate="novalidate">
@@ -164,6 +165,9 @@
 									<button type="submit" value="submit" class="btn button--active button-preview">Submit Now</button>
 								</div>
 							</form>
+							{{else}}
+							<h4>Please login to post a comment! <a href="/users/login?returnURL=/products/{{dataValues.id}}">Click here to login</a></h4>
+							{{/if}}
 						</div>
 					</div>
 				</div>
@@ -205,6 +209,7 @@
 					</div>
 					<div class="col-lg-6">
 						<div class="review_box">
+							{{#if ../isLoggedIn}}
 							<h4>Add a Review</h4>
 							<p>Your Rating:</p>
 							<ul class="list" id="starList">
@@ -229,6 +234,9 @@
 										Now</button>
 								</div>
 							</form>
+							{{else}}
+							<h4>Please login to add a review! <a href="/users/login?returnURL=/products/{{dataValues.id}}">Click here to login</a></h4>
+							{{/if}}
 						</div>
 					</div>
 				</div>
